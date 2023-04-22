@@ -40,11 +40,11 @@ export class Account {
 
   @Column({
     type: 'character varying',
-    length: 100,
-    nullable: false,
+    length: 20,
+    nullable: true,
     collation: 'C',
   })
-  balance: string;
+  color?: string;
 
   @Column({
     type: 'timestamptz',

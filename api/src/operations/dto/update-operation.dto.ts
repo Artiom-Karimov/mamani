@@ -1,4 +1,24 @@
-import { PartialType } from '@nestjs/swagger';
-import { CreateOperationDto } from './create-operation.dto';
+import {
+  IsNumber,
+  IsOptional,
+  IsString,
+  IsUUID,
+  MaxLength,
+  Min,
+} from 'class-validator';
 
-export class UpdateOperationDto extends PartialType(CreateOperationDto) {}
+export class UpdateOperationDto {
+  @IsOptional()
+  @IsString()
+  @MaxLength(300)
+  description?: string;
+
+  @IsOptional()
+  @IsNumber()
+  @Min(0)
+  amount?: number;
+
+  @IsOptional()
+  @IsUUID()
+  categoryId?: string;
+}

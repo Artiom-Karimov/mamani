@@ -1,14 +1,14 @@
 import {
-  IsBoolean,
   IsOptional,
   IsString,
+  IsUUID,
   Matches,
   MaxLength,
   MinLength,
 } from 'class-validator';
 import { expressions } from '../../shared/models/regex';
 
-export class UpdateAccountDto {
+export class UpdateOperationCategoryDto {
   @IsOptional()
   @IsString()
   @MinLength(3)
@@ -17,14 +17,15 @@ export class UpdateAccountDto {
 
   @IsOptional()
   @IsString()
+  @MinLength(3)
   @MaxLength(300)
   description?: string;
 
   @IsOptional()
-  @IsBoolean()
-  default?: boolean;
-
-  @IsOptional()
   @Matches(expressions.color)
   color?: string;
+
+  @IsOptional()
+  @IsUUID()
+  parentId?: string;
 }

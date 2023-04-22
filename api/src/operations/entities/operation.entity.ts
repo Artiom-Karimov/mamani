@@ -7,7 +7,7 @@ import {
 } from 'typeorm';
 import { Account } from '../../accounts/entities/account.entity';
 import { OperationType } from './operation-type';
-import { OperationCategory } from './operation-category.entity';
+import { OperationCategory } from '../../operation-categories/entities/operation-category.entity';
 
 @Entity()
 export class Operation {

@@ -6,7 +6,7 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { OperationType } from './operation-type';
+import { OperationType } from '../../operations/entities/operation-type';
 
 @Entity()
 export class OperationCategory {

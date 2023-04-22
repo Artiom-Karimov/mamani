@@ -1,19 +1,23 @@
 import {
-  IsBoolean,
+  IsEnum,
   IsOptional,
   IsString,
+  IsUUID,
   Matches,
   MaxLength,
   MinLength,
 } from 'class-validator';
+import { OperationType } from '../../operations/entities/operation-type';
 import { expressions } from '../../shared/models/regex';
 
-export class UpdateAccountDto {
-  @IsOptional()
+export class CreateOperationCategoryDto {
+  @IsEnum(OperationType)
+  type: OperationType;
+
   @IsString()
   @MinLength(3)
   @MaxLength(20)
-  name?: string;
+  name: string;
 
   @IsOptional()
   @IsString()
@@ -21,10 +25,10 @@ export class UpdateAccountDto {
   description?: string;
 
   @IsOptional()
-  @IsBoolean()
-  default?: boolean;
-
-  @IsOptional()
   @Matches(expressions.color)
   color?: string;
+
+  @IsOptional()
+  @IsUUID()
+  parentId?: string;
 }
