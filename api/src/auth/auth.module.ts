@@ -1,9 +1,13 @@
 import { Module } from '@nestjs/common';
-import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
+import { RegisterHandler } from './usecases/handlers/register.handler';
+import { CqrsModule } from '@nestjs/cqrs';
+import { UsersModule } from '../users/users.module';
+import { LoginHandler } from './usecases/handlers/login.handler';
 
 @Module({
+  imports: [CqrsModule, UsersModule],
   controllers: [AuthController],
-  providers: [AuthService]
+  providers: [RegisterHandler, LoginHandler],
 })
-export class AuthModule {}
+export class AuthModule { }

@@ -17,7 +17,7 @@ import {
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
-import { UserViewDto } from './dto/user-view.dto';
+import { ViewUserDto } from './dto/view-user.dto';
 
 @ApiTags('users')
 @Controller('users')
@@ -31,16 +31,16 @@ export class UsersController {
 
   @Get()
   @ApiOperation({ summary: 'Get all users' })
-  @ApiOkResponse({ type: UserViewDto, isArray: true })
+  @ApiOkResponse({ type: ViewUserDto, isArray: true })
   @ApiForbiddenResponse({ description: 'Access denied' })
-  findAll(): Promise<UserViewDto[]> {
+  findAll(): Promise<ViewUserDto[]> {
     throw new ForbiddenException();
     // return this.usersService.findAll();
   }
 
   @Get(':id')
   @ApiOperation({ summary: 'Get user by id' })
-  @ApiOkResponse({ type: UserViewDto })
+  @ApiOkResponse({ type: ViewUserDto })
   findOne(@Param('id') id: string) {
     return this.usersService.findOne(+id);
   }
