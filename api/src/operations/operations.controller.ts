@@ -1,11 +1,21 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { OperationsService } from './operations.service';
 import { CreateOperationDto } from './dto/create-operation.dto';
 import { UpdateOperationDto } from './dto/update-operation.dto';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('operations')
 @Controller('operations')
 export class OperationsController {
-  constructor(private readonly operationsService: OperationsService) {}
+  constructor(private readonly operationsService: OperationsService) { }
 
   @Post()
   create(@Body() createOperationDto: CreateOperationDto) {
@@ -23,7 +33,10 @@ export class OperationsController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateOperationDto: UpdateOperationDto) {
+  update(
+    @Param('id') id: string,
+    @Body() updateOperationDto: UpdateOperationDto,
+  ) {
     return this.operationsService.update(+id, updateOperationDto);
   }
 

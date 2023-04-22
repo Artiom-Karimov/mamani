@@ -6,11 +6,20 @@ import {
   Patch,
   Param,
   Delete,
+  ForbiddenException,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import {
+  ApiForbiddenResponse,
+  ApiOkResponse,
+  ApiOperation,
+  ApiTags,
+} from '@nestjs/swagger';
+import { UserViewDto } from './dto/user-view.dto';
 
+@ApiTags('users')
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) { }
@@ -21,11 +30,17 @@ export class UsersController {
   }
 
   @Get()
-  findAll() {
-    return this.usersService.findAll();
+  @ApiOperation({ summary: 'Get all users' })
+  @ApiOkResponse({ type: UserViewDto, isArray: true })
+  @ApiForbiddenResponse({ description: 'Access denied' })
+  findAll(): Promise<UserViewDto[]> {
+    throw new ForbiddenException();
+    // return this.usersService.findAll();
   }
 
   @Get(':id')
+  @ApiOperation({ summary: 'Get user by id' })
+  @ApiOkResponse({ type: UserViewDto })
   findOne(@Param('id') id: string) {
     return this.usersService.findOne(+id);
   }
