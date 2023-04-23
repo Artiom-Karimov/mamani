@@ -1,7 +1,7 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Account } from '../../accounts/entities/account.entity';
 import { CreateUserDto } from '../dto/create-user.dto';
-import { Hasher } from '../../shared/hasher';
+import { Hasher } from '../../shared/tools/hasher';
 
 @Entity()
 export class User {

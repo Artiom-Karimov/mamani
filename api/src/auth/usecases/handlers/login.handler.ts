@@ -3,9 +3,9 @@ import { LoginCommand } from '../commands/login.command';
 import { SessionDto } from '../../dto/session.dto';
 import { UsersRepository } from '../../../users/database/users.repository';
 import { ConfigService } from '@nestjs/config';
-import * as jwt from 'jsonwebtoken';
 import { UnauthorizedException } from '@nestjs/common';
 import { TokenPayload } from '../../dto/token-payload';
+import { AsyncJwt } from '../../../shared/tools/async-jwt';
 
 @CommandHandler(LoginCommand)
 export class LoginHandler implements ICommandHandler<LoginCommand> {
@@ -28,7 +28,7 @@ export class LoginHandler implements ICommandHandler<LoginCommand> {
     if (!success) throw new UnauthorizedException('Wrong credentials');
 
     const payload = new TokenPayload(user.id);
-    const token = jwt.sign(payload, this.key);
+    const token = await AsyncJwt.sign(payload, this.key);
 
     return { token };
   }

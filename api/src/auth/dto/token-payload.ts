@@ -1,9 +1,9 @@
 export class TokenPayload {
-  date: number;
   userId: string;
+  iat: number;
 
   constructor(userId: string) {
     this.userId = userId;
-    this.date = Date.now();
+    this.iat = Math.floor(Date.now() / 1000);
   }
 }
