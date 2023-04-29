@@ -1,27 +1,22 @@
+import { ConfigModule } from '@nestjs/config';
+// Leave this at the top for correct .env loading
+const configModule = ConfigModule.forRoot({ isGlobal: true });
+
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { ConfigModule } from '@nestjs/config';
 import { UsersModule } from './users/users.module';
 import { AccountsModule } from './accounts/accounts.module';
 import { OperationsModule } from './operations/operations.module';
 import { AuthModule } from './auth/auth.module';
 import { OperationCategoriesModule } from './operation-categories/operation-categories.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { typeOrmConfig } from './config/typeorm.config';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({ isGlobal: true }),
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      host: process.env.DB_HOST,
-      port: +(process.env.DB_PORT || 5432),
-      username: process.env.DB_USER,
-      password: process.env.DB_PASSWORD,
-      database: process.env.DB_DB,
-      entities: [],
-      synchronize: true,
-    }),
+    configModule,
+    TypeOrmModule.forRoot(typeOrmConfig),
     UsersModule,
     AccountsModule,
     OperationsModule,
