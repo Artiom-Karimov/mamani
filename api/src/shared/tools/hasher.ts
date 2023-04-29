@@ -8,7 +8,7 @@ export class Hasher {
   }
   public static async compare(
     hash: string,
-    password: string,
+    password: string | undefined,
   ): Promise<boolean> {
     if (!password || !hash) return false;
     return bcrypt.compare(password, hash);

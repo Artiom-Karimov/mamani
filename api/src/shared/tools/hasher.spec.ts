@@ -22,7 +22,7 @@ describe('Password hasher unit tests', () => {
 
   it('Null should fail', async () => {
     const hash = await Hasher.hash('therightone');
-    const result = await Hasher.compare(hash, null);
+    const result = await Hasher.compare(hash, undefined);
     expect(result).toBe(false);
   });
 });
