@@ -6,23 +6,28 @@ import {
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { CreateUserDto } from '../users/dto/create-user.dto';
-import { CommandBus } from '@nestjs/cqrs';
+import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { RegisterCommand } from './usecases/commands/register.command';
 import { ViewUserDto } from '../users/dto/view-user.dto';
 import { LoginDto } from './dto/login.dto';
 import { LoginCommand } from './usecases/commands/login.command';
 import { SessionDto } from './dto/session.dto';
+import { GetUserQuery } from '../users/usecases/queries/get-user.query';
 
 @ApiTags('auth')
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly commandBus: CommandBus) {}
+  constructor(
+    private readonly commandBus: CommandBus,
+    private readonly queryBus: QueryBus,
+  ) {}
 
   @Post('register')
   @ApiCreatedResponse({ type: ViewUserDto })
   @ApiBadRequestResponse({ description: 'Invalid data' })
   async register(@Body() data: CreateUserDto): Promise<ViewUserDto> {
-    return this.commandBus.execute(new RegisterCommand(data));
+    const id = await this.commandBus.execute(new RegisterCommand(data));
+    return this.queryBus.execute(new GetUserQuery(id));
   }
 
   @Post('login')

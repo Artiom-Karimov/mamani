@@ -5,19 +5,17 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { Request } from 'express';
-import { UsersRepository } from '../../users/database/users.repository';
 import { ConfigService } from '@nestjs/config';
 import { AsyncJwt } from '../tools/async-jwt';
 import { ViewUserDto } from '../../users/dto/view-user.dto';
+import { QueryBus } from '@nestjs/cqrs';
+import { GetUserQuery } from '../../users/usecases/queries/get-user.query';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
   private readonly key: string;
 
-  constructor(
-    private readonly repository: UsersRepository,
-    config: ConfigService,
-  ) {
+  constructor(private readonly queryBus: QueryBus, config: ConfigService) {
     const key = config.get('JWT_SECRET_KEY');
     if (!key) throw new Error('You should put JWT_SECRET_KEY into environment');
     this.key = key;
@@ -30,7 +28,10 @@ export class AuthGuard implements CanActivate {
 
     try {
       const payload = await AsyncJwt.verify(token, this.key);
-      const user = await this.repository.get(payload.userId);
+      const user = await this.queryBus.execute(
+        new GetUserQuery(payload.userId),
+      );
+      if (!user) throw new Error();
       request['user'] = new ViewUserDto(user);
     } catch {
       throw new UnauthorizedException();

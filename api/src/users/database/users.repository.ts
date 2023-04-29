@@ -1,9 +1,12 @@
+import { Logger } from '@nestjs/common';
 import { CrudRepository } from '../../shared/models/crud.repository';
 import { User } from '../entities/user.entity';
 
 export abstract class UsersRepository implements CrudRepository<User> {
-  abstract createOrUpdate(model: User): Promise<string>;
-  abstract get(id: string): Promise<User>;
-  abstract getByEmail(email: string): Promise<User>;
+  protected readonly logger = new Logger('UsersRepository');
+
+  abstract createOrUpdate(model: User): Promise<string | undefined>;
+  abstract get(id: string): Promise<User | undefined>;
+  abstract getByEmail(email: string): Promise<User | undefined>;
   abstract delete(id: string): Promise<boolean>;
 }

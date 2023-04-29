@@ -4,7 +4,7 @@ import { Account } from '../accounts/entities/account.entity';
 
 import * as path from 'path';
 
-const baseDir = path.join(__dirname, '../');
+const baseDir = path.join(__dirname, '..');
 const migrationPath = path.join(baseDir, 'migrations');
 
 export const typeOrmConfig: TypeOrmModuleOptions = {
@@ -15,6 +15,6 @@ export const typeOrmConfig: TypeOrmModuleOptions = {
   database: process.env.DB_DB,
   port: +(process.env.DB_PORT || 5432),
   entities: [User, Account],
-  migrations: [migrationPath],
+  migrations: [migrationPath + '/*.ts'],
   migrationsRun: process.env.TYPEORM_MIGRATIONS_RUN === 'true',
 };

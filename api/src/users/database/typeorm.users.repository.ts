@@ -1,17 +1,47 @@
+import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '../entities/user.entity';
 import { UsersRepository } from './users.repository';
+import { Repository } from 'typeorm';
 
 export class TypeormUsersRepository extends UsersRepository {
-  createOrUpdate(model: User): Promise<string> {
-    throw new Error('Method not implemented.');
+  constructor(@InjectRepository(User) private readonly repo: Repository<User>) {
+    super();
   }
-  get(id: string): Promise<User> {
-    throw new Error('Method not implemented.');
+
+  async createOrUpdate(model: User): Promise<string | undefined> {
+    try {
+      const result = await this.repo.save(model);
+      return result.id;
+    } catch (error) {
+      this.logger.error(error);
+      return undefined;
+    }
   }
-  getByEmail(email: string): Promise<User> {
-    throw new Error('Method not implemented.');
+  async get(id: string): Promise<User | undefined> {
+    try {
+      const result = await this.repo.findOneBy({ id });
+      return result || undefined;
+    } catch (error) {
+      this.logger.error(error);
+      return undefined;
+    }
   }
-  delete(id: string): Promise<boolean> {
-    throw new Error('Method not implemented.');
+  async getByEmail(email: string): Promise<User | undefined> {
+    try {
+      const result = await this.repo.findOneBy({ email });
+      return result || undefined;
+    } catch (error) {
+      this.logger.error(error);
+      return undefined;
+    }
+  }
+  async delete(id: string): Promise<boolean> {
+    try {
+      const result = await this.repo.delete(id);
+      return !!result.affected;
+    } catch (error) {
+      this.logger.error(error);
+      return false;
+    }
   }
 }
