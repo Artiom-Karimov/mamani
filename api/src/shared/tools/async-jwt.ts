@@ -5,8 +5,8 @@ export class AsyncJwt {
   static async sign(payload: TokenPayload, key: Secret): Promise<string> {
     const pojo = JSON.parse(JSON.stringify(payload));
     return new Promise((resolve, reject) => {
-      sign(pojo, key, (error, encoded) => {
-        if (error) {
+      sign(pojo, key, (error: Error | null, encoded: string | undefined) => {
+        if (error || !encoded) {
           return reject(error);
         }
         resolve(encoded);

@@ -16,7 +16,7 @@ import { SessionDto } from './dto/session.dto';
 @ApiTags('auth')
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly commandBus: CommandBus) { }
+  constructor(private readonly commandBus: CommandBus) {}
 
   @Post('register')
   @ApiCreatedResponse({ type: ViewUserDto })

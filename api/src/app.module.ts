@@ -20,4 +20,4 @@ import { OperationCategoriesModule } from './operation-categories/operation-cate
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule { }
+export class AppModule {}

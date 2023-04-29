@@ -15,7 +15,9 @@ export class LoginHandler implements ICommandHandler<LoginCommand> {
     private readonly repository: UsersRepository,
     config: ConfigService,
   ) {
-    this.key = config.get('JWT_SECRET_KEY');
+    const key = config.get('JWT_SECRET_KEY');
+    if (!key) throw new Error('You should put JWT_SECRET_KEY into environment');
+    this.key = key;
   }
 
   async execute(command: LoginCommand): Promise<SessionDto> {

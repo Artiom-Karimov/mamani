@@ -17,4 +17,4 @@ import { CqrsModule } from '@nestjs/cqrs';
   ],
   exports: [UsersRepository],
 })
-export class UsersModule { }
+export class UsersModule {}

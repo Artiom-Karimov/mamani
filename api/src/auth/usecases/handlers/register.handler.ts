@@ -7,7 +7,7 @@ import { ViewUserDto } from '../../../users/dto/view-user.dto';
 
 @CommandHandler(RegisterCommand)
 export class RegisterHandler implements ICommandHandler<RegisterCommand> {
-  constructor(private readonly repository: UsersRepository) { }
+  constructor(private readonly repository: UsersRepository) {}
 
   async execute(command: RegisterCommand): Promise<ViewUserDto> {
     const { data } = command;

@@ -10,4 +10,4 @@ import { LoginHandler } from './usecases/handlers/login.handler';
   controllers: [AuthController],
   providers: [RegisterHandler, LoginHandler],
 })
-export class AuthModule { }
+export class AuthModule {}
