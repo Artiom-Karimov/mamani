@@ -90,6 +90,7 @@ describe('AuthController (e2e)', () => {
     await request(app.server).post('/auth/register').send(data).expect(201);
   });
 
+  let token: string;
   it('Registered user should be able to login', async () => {
     const expected = { token: expect.anything() };
 
@@ -99,6 +100,31 @@ describe('AuthController (e2e)', () => {
       .expect(201);
 
     expect(res.body).toEqual(expected);
+    token = res.body.token;
+  });
+
+  it('Logged in user should receive self info', async () => {
+    const expected = {
+      id: expect.stringMatching(expressions.uuid),
+      email: userData.email,
+      firstName: userData.firstName,
+      lastName: userData.lastName,
+      createdAt: expect.stringMatching(expressions.isoDate),
+    };
+
+    const res = await request(app.server)
+      .get('/auth/me')
+      .set('Authorization', `Bearer ${token}`)
+      .expect(200);
+
+    expect(res.body).toEqual(expected);
+  });
+
+  it('auth/me should fail with wrong token', async () => {
+    const res = await request(app.server)
+      .get('/auth/me')
+      .set('Authorization', `Bearer rfoijfeifjfeoijfe`)
+      .expect(401);
   });
 
   it('Registered user should fail to login with wrong password', async () => {

@@ -1,7 +1,8 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
   ApiCreatedResponse,
+  ApiOkResponse,
   ApiTags,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
@@ -13,6 +14,8 @@ import { LoginDto } from './dto/login.dto';
 import { LoginCommand } from './usecases/commands/login.command';
 import { SessionDto } from './dto/session.dto';
 import { GetUserQuery } from '../users/usecases/queries/get-user.query';
+import { AuthGuard } from '../../shared/guards/auth.guard';
+import { User } from '../../shared/decorators/user.decorator';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -36,5 +39,13 @@ export class AuthController {
   @ApiUnauthorizedResponse({ description: 'Wrong credentials' })
   async login(@Body() data: LoginDto): Promise<SessionDto> {
     return this.commandBus.execute(new LoginCommand(data));
+  }
+
+  @Get('me')
+  @UseGuards(AuthGuard)
+  @ApiOkResponse({ type: ViewUserDto })
+  @ApiUnauthorizedResponse({ description: 'Invalid or expired token' })
+  async getCurrentUser(@User() user: ViewUserDto): Promise<ViewUserDto> {
+    return user;
   }
 }
