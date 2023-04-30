@@ -32,7 +32,7 @@ export class AuthGuard implements CanActivate {
         new GetUserQuery(payload.userId),
       );
       if (!user) throw new Error();
-      request['user'] = new ViewUserDto(user);
+      request.user = new ViewUserDto(user);
     } catch {
       throw new UnauthorizedException();
     }
