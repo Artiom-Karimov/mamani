@@ -1,7 +1,8 @@
-import { INestApplication } from '@nestjs/common';
+import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import { TestAppModule } from './test.module';
 import { TestDbService } from './db/test-db.service';
+import { validationConfig } from '../../src/config/validation.config';
 
 export class TestApp {
   public app: INestApplication;
@@ -17,6 +18,7 @@ export class TestApp {
     }).compile();
 
     this.app = module.createNestApplication();
+    this.app.useGlobalPipes(new ValidationPipe(validationConfig));
     await this.app.init();
   }
   async stop(): Promise<void> {

@@ -1,4 +1,11 @@
-import { IsEmail, IsString, MaxLength, MinLength } from 'class-validator';
+import {
+  IsEmail,
+  IsString,
+  Matches,
+  MaxLength,
+  MinLength,
+} from 'class-validator';
+import { expressions } from '../../../shared/models/regex';
 
 export class CreateUserDto {
   @IsEmail()
@@ -15,7 +22,6 @@ export class CreateUserDto {
   lastName: string;
 
   @IsString()
-  @MinLength(6)
-  @MaxLength(20)
+  @Matches(expressions.password)
   password: string;
 }
