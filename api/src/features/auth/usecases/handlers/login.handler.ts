@@ -5,7 +5,7 @@ import { UsersRepository } from '../../../users/database/users.repository';
 import { ConfigService } from '@nestjs/config';
 import { UnauthorizedException } from '@nestjs/common';
 import { TokenPayload } from '../../dto/token-payload';
-import { AsyncJwt } from '../../../shared/tools/async-jwt';
+import { AsyncJwt } from '../../../../shared/tools/async-jwt';
 
 @CommandHandler(LoginCommand)
 export class LoginHandler implements ICommandHandler<LoginCommand> {

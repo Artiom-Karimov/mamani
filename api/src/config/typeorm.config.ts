@@ -1,6 +1,6 @@
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
-import { User } from '../users/entities/user.entity';
-import { Account } from '../accounts/entities/account.entity';
+import { User } from '../features/users/entities/user.entity';
+import { Account } from '../features/accounts/entities/account.entity';
 
 import * as path from 'path';
 

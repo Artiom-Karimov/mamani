@@ -7,9 +7,9 @@ import {
 import { Request } from 'express';
 import { ConfigService } from '@nestjs/config';
 import { AsyncJwt } from '../tools/async-jwt';
-import { ViewUserDto } from '../../users/dto/view-user.dto';
+import { ViewUserDto } from '../../features/users/dto/view-user.dto';
 import { QueryBus } from '@nestjs/cqrs';
-import { GetUserQuery } from '../../users/usecases/queries/get-user.query';
+import { GetUserQuery } from '../../features/users/usecases/queries/get-user.query';
 
 @Injectable()
 export class AuthGuard implements CanActivate {

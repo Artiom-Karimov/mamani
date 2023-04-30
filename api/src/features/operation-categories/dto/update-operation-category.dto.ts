@@ -1,5 +1,4 @@
 import {
-  IsEnum,
   IsOptional,
   IsString,
   IsUUID,
@@ -7,20 +6,18 @@ import {
   MaxLength,
   MinLength,
 } from 'class-validator';
-import { OperationType } from '../../operations/entities/operation-type';
-import { expressions } from '../../shared/models/regex';
+import { expressions } from '../../../shared/models/regex';
 
-export class CreateOperationCategoryDto {
-  @IsEnum(OperationType)
-  type: OperationType;
-
+export class UpdateOperationCategoryDto {
+  @IsOptional()
   @IsString()
   @MinLength(3)
   @MaxLength(20)
-  name: string;
+  name?: string;
 
   @IsOptional()
   @IsString()
+  @MinLength(3)
   @MaxLength(300)
   description?: string;
 

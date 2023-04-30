@@ -1,5 +1,5 @@
 import { Secret, sign, verify } from 'jsonwebtoken';
-import { TokenPayload } from '../../auth/dto/token-payload';
+import { TokenPayload } from '../../features/auth/dto/token-payload';
 
 export class AsyncJwt {
   static async sign(payload: TokenPayload, key: Secret): Promise<string> {

@@ -6,7 +6,7 @@ import {
   MaxLength,
   MinLength,
 } from 'class-validator';
-import { expressions } from '../../shared/models/regex';
+import { expressions } from '../../../shared/models/regex';
 
 export class UpdateAccountDto {
   @IsOptional()
