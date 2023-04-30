@@ -25,6 +25,6 @@ import { GetUserHandler } from './usecases/handlers/get-user.handler';
       useClass: TypeormUsersQueryRepository,
     },
   ],
-  exports: [UsersRepository],
+  exports: [UsersRepository, UsersQueryRepository],
 })
 export class UsersModule {}
