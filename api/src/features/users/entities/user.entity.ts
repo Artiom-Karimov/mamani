@@ -1,13 +1,11 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToMany } from 'typeorm';
 import { Account } from '../../accounts/entities/account.entity';
 import { CreateUserDto } from '../dto/create-user.dto';
 import { Hasher } from '../../../shared/tools/hasher';
+import { DomainEntity } from '../../../shared/models/domain.entity';
 
 @Entity()
-export class User {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
-
+export class User extends DomainEntity {
   @Column({
     type: 'character varying',
     length: 200,
@@ -39,13 +37,6 @@ export class User {
     collation: 'C',
   })
   hash: string;
-
-  @Column({
-    type: 'timestamptz',
-    nullable: false,
-    default: () => 'CURRENT_TIMESTAMP',
-  })
-  createdAt: Date;
 
   @OneToMany(() => Account, (a) => a.user)
   accounts?: Account[];

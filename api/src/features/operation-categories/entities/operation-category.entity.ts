@@ -1,18 +1,9 @@
-import {
-  Column,
-  Entity,
-  JoinColumn,
-  ManyToOne,
-  OneToMany,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 import { OperationType } from '../../operations/entities/operation-type';
+import { DomainEntity } from '../../../shared/models/domain.entity';
 
 @Entity()
-export class OperationCategory {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
-
+export class OperationCategory extends DomainEntity {
   @Column({ type: 'enum', enum: OperationType, nullable: false })
   type: OperationType;
 

@@ -1,32 +1,17 @@
-import {
-  Column,
-  Entity,
-  JoinColumn,
-  ManyToOne,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 import { Account } from '../../accounts/entities/account.entity';
 import { OperationType } from './operation-type';
 import { OperationCategory } from '../../operation-categories/entities/operation-category.entity';
+import { DomainEntity } from '../../../shared/models/domain.entity';
 
 @Entity()
-export class Operation {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
-
+export class Operation extends DomainEntity {
   @Column({ type: 'uuid', nullable: false })
   accountId: string;
 
   @ManyToOne(() => Account, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'accountId' })
   account: Account;
-
-  @Column({
-    type: 'timestamptz',
-    nullable: false,
-    default: () => 'CURRENT_TIMESTAMP',
-  })
-  createdAt: Date;
 
   @Column({
     type: 'character varying',

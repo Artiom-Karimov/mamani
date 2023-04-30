@@ -1,17 +1,9 @@
-import {
-  Column,
-  Entity,
-  JoinColumn,
-  ManyToOne,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 import { User } from '../../users/entities/user.entity';
+import { DomainEntity } from '../../../shared/models/domain.entity';
 
 @Entity()
-export class Account {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
-
+export class Account extends DomainEntity {
   @Column({ type: 'uuid', nullable: false })
   userId: string;
 
@@ -45,11 +37,4 @@ export class Account {
     collation: 'C',
   })
   color?: string;
-
-  @Column({
-    type: 'timestamptz',
-    nullable: false,
-    default: () => 'CURRENT_TIMESTAMP',
-  })
-  createdAt: Date;
 }
