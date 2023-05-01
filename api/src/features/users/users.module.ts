@@ -6,7 +6,6 @@ import { CqrsModule } from '@nestjs/cqrs';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { UsersQueryRepository } from './database/users.query.repository';
-import { TypeormUsersQueryRepository } from './database/typeorm.users.query.repository';
 import { GetUserHandler } from './usecases/handlers/get-user.handler';
 
 @Module({
@@ -16,10 +15,7 @@ import { GetUserHandler } from './usecases/handlers/get-user.handler';
     UsersService,
     GetUserHandler,
     UsersRepository,
-    {
-      provide: UsersQueryRepository,
-      useClass: TypeormUsersQueryRepository,
-    },
+    UsersQueryRepository,
   ],
   exports: [UsersRepository, UsersQueryRepository],
 })
