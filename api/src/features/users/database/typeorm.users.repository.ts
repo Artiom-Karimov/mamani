@@ -19,13 +19,7 @@ export class TypeormUsersRepository extends UsersRepository {
     return this.crudRepo.get(id);
   }
   async getByEmail(email: string): Promise<User | undefined> {
-    try {
-      const result = await this.repo.findOneBy({ email });
-      return result || undefined;
-    } catch (error) {
-      this.logger.error(error);
-      return undefined;
-    }
+    return this.crudRepo.getByKey('email', email);
   }
   async delete(id: string): Promise<boolean> {
     return this.crudRepo.delete(id);
