@@ -13,7 +13,14 @@ import {
 import { CreateAccountDto } from './dto/create-account.dto';
 import { UpdateAccountDto } from './dto/update-account.dto';
 import {
+  ApiBadRequestResponse,
   ApiBearerAuth,
+  ApiCreatedResponse,
+  ApiForbiddenResponse,
+  ApiNoContentResponse,
+  ApiNotFoundResponse,
+  ApiOkResponse,
+  ApiOperation,
   ApiTags,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
@@ -41,6 +48,12 @@ export class AccountsController {
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
+  @ApiOperation({ summary: 'Create new account for current user' })
+  @ApiCreatedResponse({
+    description: 'Success, returns created account',
+    type: ViewAccountDto,
+  })
+  @ApiBadRequestResponse({ description: 'Invalid data' })
   async create(
     @Body() data: CreateAccountDto,
     @User() user: ViewUserDto,
@@ -52,11 +65,15 @@ export class AccountsController {
   }
 
   @Get()
+  @ApiOperation({ summary: 'Get all current user accounts' })
   async findAll(@User() user: ViewUserDto): Promise<ViewAccountDto[]> {
     return this.queryBus.execute(new GetUserAccountsQuery(user.id));
   }
 
   @Get(':id')
+  @ApiOperation({ summary: 'Get account' })
+  @ApiForbiddenResponse({ description: 'Account belongs to another user' })
+  @ApiNotFoundResponse({ description: 'Account not found' })
   async findOne(
     @Param('id') id: string,
     @User() user: ViewUserDto,
@@ -66,6 +83,14 @@ export class AccountsController {
 
   @Patch(':id')
   @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Update account' })
+  @ApiOkResponse({
+    description: 'Success, returns updated account',
+    type: ViewAccountDto,
+  })
+  @ApiBadRequestResponse({ description: 'Invalid data' })
+  @ApiForbiddenResponse({ description: 'Account belongs to another user' })
+  @ApiNotFoundResponse({ description: 'Account not found' })
   async update(
     @Param('id') id: string,
     @Body() data: UpdateAccountDto,
@@ -77,6 +102,10 @@ export class AccountsController {
 
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
+  @ApiOperation({ summary: 'Delete account' })
+  @ApiNoContentResponse({ description: 'Success' })
+  @ApiForbiddenResponse({ description: 'Account belongs to another user' })
+  @ApiNotFoundResponse({ description: 'Account not found' })
   async remove(
     @Param('id') id: string,
     @User() user: ViewUserDto,
