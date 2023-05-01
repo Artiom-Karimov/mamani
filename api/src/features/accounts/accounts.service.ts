@@ -1,26 +1,19 @@
 import { Injectable } from '@nestjs/common';
-import { CreateAccountDto } from './dto/create-account.dto';
-import { UpdateAccountDto } from './dto/update-account.dto';
+import { AccountsRepository } from './database/accounts.repository';
 
 @Injectable()
 export class AccountsService {
-  create(createAccountDto: CreateAccountDto) {
-    return 'This action adds a new account';
-  }
+  constructor(private readonly repo: AccountsRepository) {}
 
-  findAll() {
-    return `This action returns all accounts`;
-  }
+  async releaseDefaultAccount(userId: string): Promise<void> {
+    const account = await this.repo.getByPartial({
+      userId,
+      default: true,
+    });
 
-  findOne(id: number) {
-    return `This action returns a #${id} account`;
-  }
+    if (!account) return;
 
-  update(id: number, updateAccountDto: UpdateAccountDto) {
-    return `This action updates a #${id} account`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} account`;
+    account.default = false;
+    await this.repo.createOrUpdate(account);
   }
 }

@@ -3,15 +3,23 @@ import { AccountsService } from './accounts.service';
 import { AccountsController } from './accounts.controller';
 import { AccountsRepository } from './database/accounts.repository';
 import { AccountsQueryRepository } from './database/accounts.query.repository';
-import { TypeormAccountsQueryRepository } from './database/typeorm.accounts.query.repository';
 import { UsersModule } from '../users/users.module';
 import { CqrsModule } from '@nestjs/cqrs';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Account } from './entities/account.entity';
 import { CreateAccountHandler } from './usecases/handlers/create-account.handler';
 import { GetAccountHandler } from './usecases/handlers/get-account.handler';
+import { GetUserAccountsHandler } from './usecases/handlers/get-user-accounts.query';
+import { UpdateAccountHandler } from './usecases/handlers/update-account.handler';
+import { DeleteAccountHandler } from './usecases/handlers/delete-account.handler';
 
-const handlers = [CreateAccountHandler, GetAccountHandler];
+const handlers = [
+  CreateAccountHandler,
+  GetAccountHandler,
+  UpdateAccountHandler,
+  DeleteAccountHandler,
+  GetUserAccountsHandler,
+];
 
 @Module({
   imports: [CqrsModule, TypeOrmModule.forFeature([Account]), UsersModule],
@@ -19,10 +27,7 @@ const handlers = [CreateAccountHandler, GetAccountHandler];
   providers: [
     AccountsService,
     AccountsRepository,
-    {
-      provide: AccountsQueryRepository,
-      useClass: TypeormAccountsQueryRepository,
-    },
+    AccountsQueryRepository,
     ...handlers,
   ],
   exports: [AccountsRepository, AccountsQueryRepository],

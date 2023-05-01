@@ -7,6 +7,8 @@ import {
   Param,
   Delete,
   UseGuards,
+  HttpCode,
+  HttpStatus,
 } from '@nestjs/common';
 import { CreateAccountDto } from './dto/create-account.dto';
 import { UpdateAccountDto } from './dto/update-account.dto';
@@ -38,6 +40,7 @@ export class AccountsController {
   ) {}
 
   @Post()
+  @HttpCode(HttpStatus.CREATED)
   async create(
     @Body() data: CreateAccountDto,
     @User() user: ViewUserDto,
@@ -62,6 +65,7 @@ export class AccountsController {
   }
 
   @Patch(':id')
+  @HttpCode(HttpStatus.OK)
   async update(
     @Param('id') id: string,
     @Body() data: UpdateAccountDto,
@@ -72,6 +76,7 @@ export class AccountsController {
   }
 
   @Delete(':id')
+  @HttpCode(HttpStatus.NO_CONTENT)
   async remove(
     @Param('id') id: string,
     @User() user: ViewUserDto,

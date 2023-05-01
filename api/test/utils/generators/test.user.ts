@@ -6,8 +6,9 @@ export class TestUser extends CreateUserDto {
   public token: string | undefined;
 
   private static counter = 0;
+  public static readonly users: TestUser[] = [];
 
-  constructor() {
+  constructor(private readonly server: any) {
     super();
     const name = `user-${TestUser.counter}`;
     this.email = `${name}@example.com`;
@@ -16,10 +17,28 @@ export class TestUser extends CreateUserDto {
     this.password = `${name}-pass`;
 
     TestUser.counter++;
+    TestUser.users.push(this);
   }
 
-  async register(server: any): Promise<void> {
-    const res = await request(server)
+  /** Create [amount] users without sending to db */
+  static generate(server: any, amount: number): void {
+    for (let i = 0; i < amount; i++) new TestUser(server);
+  }
+
+  /** Remove all entries from users array */
+  static clear(): void {
+    TestUser.users.splice(0, TestUser.users.length);
+  }
+
+  static async RegisterAndLoginAll(): Promise<void> {
+    for (const user of TestUser.users) {
+      await user.register();
+      await user.login();
+    }
+  }
+
+  async register(): Promise<void> {
+    const res = await request(this.server)
       .post('/auth/register')
       .send(this)
       .expect(201);
@@ -27,8 +46,8 @@ export class TestUser extends CreateUserDto {
     this.id = res.body.id;
   }
 
-  async login(server: any): Promise<string | undefined> {
-    const res = await request(server)
+  async login(): Promise<string | undefined> {
+    const res = await request(this.server)
       .post('/auth/login')
       .send({ email: this.email, password: this.password })
       .expect(201);
