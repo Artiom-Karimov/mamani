@@ -7,9 +7,11 @@ import { AccountsQueryRepository } from './database/accounts.query.repository';
 import { TypeormAccountsQueryRepository } from './database/typeorm.accounts.query.repository';
 import { UsersModule } from '../users/users.module';
 import { CqrsModule } from '@nestjs/cqrs';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { Account } from './entities/account.entity';
 
 @Module({
-  imports: [CqrsModule, UsersModule],
+  imports: [CqrsModule, TypeOrmModule.forFeature([Account]), UsersModule],
   controllers: [AccountsController],
   providers: [
     AccountsService,

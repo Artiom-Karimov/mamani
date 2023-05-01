@@ -1,5 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { CrudRepository } from '../../../shared/models/crud.repository';
+import { CrudRepository } from '../../../shared/database/crud.repository';
 import { Account } from '../entities/account.entity';
 
 @Injectable()

@@ -1,5 +1,5 @@
 import { Logger } from '@nestjs/common';
-import { CrudRepository } from '../../../shared/models/crud.repository';
+import { CrudRepository } from '../../../shared/database/crud.repository';
 import { User } from '../entities/user.entity';
 
 export abstract class UsersRepository implements CrudRepository<User> {
