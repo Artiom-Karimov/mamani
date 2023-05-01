@@ -6,5 +6,6 @@ export class ViewOperationCategoryDto {
   name: string;
   description?: string;
   color?: string;
+  userId?: string;
   parentId?: string;
 }

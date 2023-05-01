@@ -1,7 +1,6 @@
 import {
   IsOptional,
   IsString,
-  IsUUID,
   Matches,
   MaxLength,
   MinLength,
@@ -24,8 +23,4 @@ export class UpdateOperationCategoryDto {
   @IsOptional()
   @Matches(expressions.color)
   color?: string;
-
-  @IsOptional()
-  @IsUUID()
-  parentId?: string;
 }
