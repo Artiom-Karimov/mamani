@@ -1,6 +1,7 @@
 import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 import { User } from '../../users/entities/user.entity';
 import { DomainEntity } from '../../../shared/models/domain.entity';
+import { CreateAccountDto } from '../dto/create-account.dto';
 
 @Entity()
 export class Account extends DomainEntity {
@@ -37,4 +38,16 @@ export class Account extends DomainEntity {
     collation: 'C',
   })
   color?: string;
+
+  constructor(user?: User, data?: CreateAccountDto) {
+    super();
+    if (!user || !data) return;
+    this.user = user;
+    this.userId = user.id;
+
+    this.name = data.name;
+    this.description = data.description;
+    this.default = data.default === true;
+    this.color = data.color;
+  }
 }

@@ -11,7 +11,7 @@ export class RegisterHandler implements ICommandHandler<RegisterCommand> {
   async execute(command: RegisterCommand): Promise<string> {
     const { data } = command;
 
-    const existing = await this.repository.getByEmail(data.email);
+    const existing = await this.repository.getByField('email', data.email);
     if (existing)
       throw new BadRequestException(`User ${data.email} already exists`);
 

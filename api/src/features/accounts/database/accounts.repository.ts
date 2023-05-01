@@ -1,12 +1,12 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { CrudRepository } from '../../../shared/database/crud.repository';
 import { Account } from '../entities/account.entity';
+import { TypeormCrudRepository } from '../../../shared/database/typeorm.crud.repository';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 
 @Injectable()
-export abstract class AccountsRepository implements CrudRepository<Account> {
-  protected readonly logger = new Logger('AccountsRepository');
-
-  abstract createOrUpdate(model: Account): Promise<string | undefined>;
-  abstract get(id: string): Promise<Account | undefined>;
-  abstract delete(id: string): Promise<boolean | undefined>;
+export class AccountsRepository extends TypeormCrudRepository<Account> {
+  constructor(@InjectRepository(Account) repo: Repository<Account>) {
+    super(repo, new Logger('AccountsRepository'));
+  }
 }

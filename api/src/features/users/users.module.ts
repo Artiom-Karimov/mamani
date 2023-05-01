@@ -2,7 +2,6 @@ import { Module } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { UsersController } from './users.controller';
 import { UsersRepository } from './database/users.repository';
-import { TypeormUsersRepository } from './database/typeorm.users.repository';
 import { CqrsModule } from '@nestjs/cqrs';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
@@ -16,10 +15,7 @@ import { GetUserHandler } from './usecases/handlers/get-user.handler';
   providers: [
     UsersService,
     GetUserHandler,
-    {
-      provide: UsersRepository,
-      useClass: TypeormUsersRepository,
-    },
+    UsersRepository,
     {
       provide: UsersQueryRepository,
       useClass: TypeormUsersQueryRepository,

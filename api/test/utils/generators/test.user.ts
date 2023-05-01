@@ -14,6 +14,8 @@ export class TestUser extends CreateUserDto {
     this.firstName = name;
     this.lastName = `${name}-last`;
     this.password = `${name}-pass`;
+
+    TestUser.counter++;
   }
 
   async register(server: any): Promise<void> {

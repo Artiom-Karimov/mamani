@@ -23,7 +23,7 @@ export class LoginHandler implements ICommandHandler<LoginCommand> {
   async execute(command: LoginCommand): Promise<SessionDto> {
     const { email, password } = command.data;
 
-    const user = await this.repository.getByEmail(email);
+    const user = await this.repository.getByField('email', email);
     if (!user) throw new UnauthorizedException('Wrong credentials');
 
     const success = await user.checkPassword(password);

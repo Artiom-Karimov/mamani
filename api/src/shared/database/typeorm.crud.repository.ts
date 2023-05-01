@@ -29,13 +29,24 @@ export class TypeormCrudRepository<TModel extends DomainEntity>
       return undefined;
     }
   }
-  async getByKey(
+  async getByField(
     key: keyof TModel,
     value: unknown,
   ): Promise<TModel | undefined> {
     try {
       const result = await this.repo.findOne({
         where: { [key]: value },
+      } as any);
+      return result || undefined;
+    } catch (error) {
+      this.logger.error(error);
+      return undefined;
+    }
+  }
+  async getByPartial(filter: Partial<TModel>): Promise<TModel | undefined> {
+    try {
+      const result = await this.repo.findOne({
+        where: filter,
       } as any);
       return result || undefined;
     } catch (error) {
