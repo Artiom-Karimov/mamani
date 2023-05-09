@@ -9,7 +9,7 @@ import { UsersModule } from './features/users/users.module';
 import { AccountsModule } from './features/accounts/accounts.module';
 import { OperationsModule } from './features/operations/operations.module';
 import { AuthModule } from './features/auth/auth.module';
-import { OperationCategoriesModule } from './features/operation-categories/operation-categories.module';
+import { CategoriesModule } from './features/operation-categories/categories.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { typeOrmConfig } from './config/typeorm.config';
 
@@ -21,7 +21,7 @@ import { typeOrmConfig } from './config/typeorm.config';
     AccountsModule,
     OperationsModule,
     AuthModule,
-    OperationCategoriesModule,
+    CategoriesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -3,7 +3,7 @@ import { User } from '../features/users/entities/user.entity';
 import { Account } from '../features/accounts/entities/account.entity';
 
 import * as path from 'path';
-import { OperationCategory } from '../features/operation-categories/entities/operation-category.entity';
+import { Category } from '../features/operation-categories/entities/category.entity';
 
 const baseDir = path.join(__dirname, '..');
 const migrationPath = path.join(baseDir, 'migrations');
@@ -15,7 +15,7 @@ export const typeOrmConfig: TypeOrmModuleOptions = {
   password: process.env.DB_PASSWORD,
   database: process.env.DB_DB,
   port: +(process.env.DB_PORT || 5432),
-  entities: [User, Account, OperationCategory],
+  entities: [User, Account, Category],
   migrations: [migrationPath + '/*.ts'],
   migrationsRun: process.env.TYPEORM_MIGRATIONS_RUN === 'true',
 };

@@ -2,11 +2,11 @@ import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 import { OperationType } from '../../operations/entities/operation-type';
 import { DomainEntity } from '../../../shared/models/domain.entity';
 import { User } from '../../users/entities/user.entity';
-import { CreateOperationCategoryDto } from '../dto/create-operation-category.dto';
-import { UpdateOperationCategoryDto } from '../dto/update-operation-category.dto';
+import { CreateCategoryDto } from '../dto/create-category.dto';
+import { UpdateCategoryDto } from '../dto/update-category.dto';
 
 @Entity()
-export class OperationCategory extends DomainEntity {
+export class Category extends DomainEntity {
   @Column({ type: 'enum', enum: OperationType, nullable: false })
   type: OperationType;
 
@@ -45,18 +45,14 @@ export class OperationCategory extends DomainEntity {
   @Column({ type: 'uuid', nullable: true })
   parentId?: string;
 
-  @ManyToOne(() => OperationCategory, (p) => p.children)
+  @ManyToOne(() => Category, (p) => p.children)
   @JoinColumn({ name: 'parentId' })
-  parent?: OperationCategory;
+  parent?: Category;
 
-  @OneToMany(() => OperationCategory, (c) => c.parent)
-  children?: OperationCategory[];
+  @OneToMany(() => Category, (c) => c.parent, { eager: true })
+  children?: Category[];
 
-  constructor(
-    data?: CreateOperationCategoryDto,
-    user?: User,
-    parent?: OperationCategory,
-  ) {
+  constructor(data?: CreateCategoryDto, user?: User, parent?: Category) {
     super();
     if (!data) return;
 
@@ -75,9 +71,13 @@ export class OperationCategory extends DomainEntity {
     }
   }
 
-  update(data: UpdateOperationCategoryDto): void {
+  update(data: UpdateCategoryDto): void {
     if (data.name) this.name = data.name;
     if (data.description) this.description = data.description;
     if (data.color) this.color = data.color;
+  }
+
+  get hasChildren(): boolean {
+    return this.children != null && this.children.length > 0;
   }
 }

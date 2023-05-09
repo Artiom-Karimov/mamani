@@ -10,7 +10,7 @@ import {
 import { OperationType } from '../../operations/entities/operation-type';
 import { expressions } from '../../../shared/models/regex';
 
-export class CreateOperationCategoryDto {
+export class CreateCategoryDto {
   @IsEnum(OperationType)
   type: OperationType;
 

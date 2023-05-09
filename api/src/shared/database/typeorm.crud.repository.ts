@@ -7,8 +7,8 @@ export class TypeormCrudRepository<TModel extends DomainEntity>
   implements CrudRepository<TModel>
 {
   constructor(
-    private readonly repo: Repository<TModel>,
-    private readonly logger: Logger,
+    protected readonly repo: Repository<TModel>,
+    protected readonly logger: Logger,
   ) {}
 
   async createOrUpdate(model: TModel): Promise<string | undefined> {

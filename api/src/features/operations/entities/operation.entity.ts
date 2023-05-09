@@ -1,7 +1,7 @@
 import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 import { Account } from '../../accounts/entities/account.entity';
 import { OperationType } from './operation-type';
-import { OperationCategory } from '../../operation-categories/entities/operation-category.entity';
+import { Category } from '../../operation-categories/entities/category.entity';
 import { DomainEntity } from '../../../shared/models/domain.entity';
 
 @Entity()
@@ -35,7 +35,7 @@ export class Operation extends DomainEntity {
   @Column({ type: 'uuid', nullable: true })
   categoryId?: string;
 
-  @ManyToOne(() => OperationCategory)
+  @ManyToOne(() => Category)
   @JoinColumn({ name: 'categoryId' })
-  category?: OperationCategory;
+  category?: Category;
 }

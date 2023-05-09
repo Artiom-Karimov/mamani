@@ -8,7 +8,7 @@ import { ForbiddenException, NotFoundException } from '@nestjs/common';
 export class GetAccountHandler implements IQueryHandler<GetAccountQuery> {
   constructor(private readonly repo: AccountsQueryRepository) {}
 
-  async execute(query: GetAccountQuery): Promise<ViewAccountDto | undefined> {
+  async execute(query: GetAccountQuery): Promise<ViewAccountDto> {
     const result = await this.repo.get(query.id);
     if (!result) throw new NotFoundException('Account not found');
 

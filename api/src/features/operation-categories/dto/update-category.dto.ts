@@ -7,7 +7,7 @@ import {
 } from 'class-validator';
 import { expressions } from '../../../shared/models/regex';
 
-export class UpdateOperationCategoryDto {
+export class UpdateCategoryDto {
   @IsOptional()
   @IsString()
   @MinLength(3)
