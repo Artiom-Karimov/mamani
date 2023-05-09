@@ -11,6 +11,7 @@ export class GetUserCategoriesHandler
 
   async execute(query: GetUserCategoriesQuery): Promise<ViewCategoryDto[]> {
     const result = await this.repo.getByUser(query.userId);
-    return ViewCategoryDto.removeChildrenFromList(result);
+    ViewCategoryDto.moveChildrenIntoParents(result);
+    return result;
   }
 }

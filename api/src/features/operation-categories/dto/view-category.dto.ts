@@ -39,15 +39,18 @@ export class ViewCategoryDto {
     this.children = model.children;
   }
 
-  static removeChildrenFromList(models: ViewCategoryDto[]): ViewCategoryDto[] {
-    const childIds = new Array<string>();
+  static moveChildrenIntoParents(models: ViewCategoryDto[]): void {
+    for (let i = 0; i < models.length; i++) {
+      const child = models[i];
+      if (!child.parentId) continue;
 
-    for (const model of models) {
-      if (!model.children || !model.children.length) continue;
-      const ids = model.children.map((c) => c.id);
-      childIds.push(...ids);
+      const parent = models.find((m) => m.id === child.parentId);
+      if (!parent) continue;
+
+      if (!parent.children) parent.children = [];
+      parent.children.push(child);
+      models.splice(i, 1);
+      i--;
     }
-
-    return models.filter((m) => !childIds.includes(m.id));
   }
 }

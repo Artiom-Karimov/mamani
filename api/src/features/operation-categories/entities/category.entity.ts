@@ -49,7 +49,7 @@ export class Category extends DomainEntity {
   @JoinColumn({ name: 'parentId' })
   parent?: Category;
 
-  @OneToMany(() => Category, (c) => c.parent, { eager: true })
+  @OneToMany(() => Category, (c) => c.parent)
   children?: Category[];
 
   constructor(data?: CreateCategoryDto, user?: User, parent?: Category) {
@@ -66,6 +66,7 @@ export class Category extends DomainEntity {
       this.userId = user.id;
     }
     if (parent) {
+      if (parent.type !== this.type) this.type = parent.type;
       this.parent = parent;
       this.parentId = parent.id;
     }
