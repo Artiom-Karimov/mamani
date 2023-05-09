@@ -25,7 +25,7 @@ export class CategoriesQueryRepository {
     try {
       const result = await this.repo.find({
         where: [{ userId }, { userId: IsNull() }],
-        order: { userId: 'DESC', name: 'DESC', createdAt: 'DESC' },
+        order: { userId: 'DESC', name: 'ASC', createdAt: 'DESC' },
       });
       return result.map((a) => new ViewCategoryDto(a));
     } catch (error) {

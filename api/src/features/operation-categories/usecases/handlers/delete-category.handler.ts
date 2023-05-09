@@ -20,12 +20,16 @@ export class DeleteCategoryHandler
     if (category.userId !== command.userId)
       throw new ForbiddenException('Category belongs to another user');
 
-    if (category.hasChildren)
-      throw new ForbiddenException('Category has children');
+    await this.checkHasChildren(command.id);
 
     // TODO: check if category has operations
 
     const result = await this.repo.delete(command.id);
     if (!result) throw new BadRequestException('Cannot delete category');
+  }
+
+  async checkHasChildren(id: string): Promise<void> {
+    const child = await this.repo.getByField('parentId', id);
+    if (child) throw new ForbiddenException('Category has children');
   }
 }
