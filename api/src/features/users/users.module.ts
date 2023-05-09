@@ -1,6 +1,5 @@
 import { Module } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { UsersController } from './users.controller';
 import { UsersRepository } from './database/users.repository';
 import { CqrsModule } from '@nestjs/cqrs';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -10,7 +9,7 @@ import { GetUserHandler } from './usecases/handlers/get-user.handler';
 
 @Module({
   imports: [CqrsModule, TypeOrmModule.forFeature([User])],
-  controllers: [UsersController],
+  controllers: [],
   providers: [
     UsersService,
     GetUserHandler,
