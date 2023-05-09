@@ -6,6 +6,7 @@ import {
   MinLength,
 } from 'class-validator';
 import { expressions } from '../../../shared/models/regex';
+import { ApiProperty } from '@nestjs/swagger';
 
 export class UpdateCategoryDto {
   @IsOptional()
@@ -22,5 +23,6 @@ export class UpdateCategoryDto {
 
   @IsOptional()
   @Matches(expressions.color)
+  @ApiProperty({ required: false, example: '#00fade' })
   color?: string;
 }

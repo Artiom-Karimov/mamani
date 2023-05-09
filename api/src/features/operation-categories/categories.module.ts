@@ -7,6 +7,19 @@ import { Category } from './entities/category.entity';
 import { CategoriesRepository } from './database/categories.repository';
 import { CategoriesQueryRepository } from './database/categories.query.repository';
 import { UsersModule } from '../users/users.module';
+import { CreateCategoryHandler } from './usecases/handlers/create-category.handler';
+import { UpdateCategoryHandler } from './usecases/handlers/update-category.handler';
+import { DeleteCategoryHandler } from './usecases/handlers/delete-category.handler';
+import { GetCategoryHandler } from './usecases/handlers/get-category.handler';
+import { GetUserCategoriesHandler } from './usecases/handlers/get-user-categories.handler';
+
+const handlers = [
+  CreateCategoryHandler,
+  UpdateCategoryHandler,
+  DeleteCategoryHandler,
+  GetCategoryHandler,
+  GetUserCategoriesHandler,
+];
 
 @Module({
   imports: [CqrsModule, TypeOrmModule.forFeature([Category]), UsersModule],
@@ -15,6 +28,7 @@ import { UsersModule } from '../users/users.module';
     CategoriesService,
     CategoriesRepository,
     CategoriesQueryRepository,
+    ...handlers,
   ],
 })
 export class CategoriesModule {}

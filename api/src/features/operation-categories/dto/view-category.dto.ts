@@ -1,3 +1,4 @@
+import { ApiProperty } from '@nestjs/swagger';
 import { OperationType } from '../../operations/entities/operation-type';
 import { Category } from '../entities/category.entity';
 
@@ -9,6 +10,20 @@ export class ViewCategoryDto {
   color?: string;
   userId?: string;
   parentId?: string;
+
+  @ApiProperty({
+    type: [ViewCategoryDto],
+    example: [
+      {
+        id: '123e4567-e89b-12d3-a456-426614174000',
+        type: OperationType.Income,
+        name: 'Salary',
+        description: 'Thats how I get mamani',
+        color: '#eeeeee',
+        userId: '123e4567-e89b-12d3-a456-426614174000',
+      },
+    ],
+  })
   children?: ViewCategoryDto[];
 
   constructor(model?: Category) {
