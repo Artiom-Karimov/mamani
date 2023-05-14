@@ -1,6 +1,5 @@
 import {
   IsDate,
-  IsEnum,
   IsNumber,
   IsOptional,
   IsString,
@@ -8,14 +7,10 @@ import {
   MaxLength,
   Min,
 } from 'class-validator';
-import { OperationType } from '../entities/operation-type';
 
 export class CreateOperationDto {
   @IsUUID()
   accountId: string;
-
-  @IsEnum(OperationType)
-  type: OperationType;
 
   @IsOptional()
   @IsString()
@@ -28,7 +23,7 @@ export class CreateOperationDto {
 
   @IsOptional()
   @IsUUID()
-  categoryId?: string;
+  categoryId: string;
 
   @IsDate()
   createdAt?: Date;
