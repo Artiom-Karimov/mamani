@@ -83,17 +83,23 @@ export class Operation extends DomainEntity {
     return result;
   }
 
-  /** When uipdating category, you have to load operation account */
-  public update(data: UpdateOperationDto, category?: Category): OperationError {
-    const err = this.checkBeforeUpdate(data, category);
+  /** To update category call 'updateCategory' */
+  public update(data: UpdateOperationDto): OperationError {
+    const err = this.checkBeforeUpdate(data);
     if (err !== OperationError.NoError) return err;
 
     if (data.amount) this.number = data.amount;
     if (data.description) this.description = data.description;
-    if (category) {
-      this.category = category;
-      this.categoryId = category.id;
-    }
+
+    return OperationError.NoError;
+  }
+
+  public updateCategory(category: Category): OperationError {
+    if (category.userId && category.userId !== this.account?.userId)
+      return OperationError.ForeignCategory;
+
+    this.category = category;
+    this.categoryId = category.id;
 
     return OperationError.NoError;
   }
@@ -117,15 +123,9 @@ export class Operation extends DomainEntity {
     return !isNaN(value) && value >= 0 && value <= Number.MAX_SAFE_INTEGER;
   }
 
-  private checkBeforeUpdate(
-    data: UpdateOperationDto,
-    category?: Category,
-  ): OperationError {
+  private checkBeforeUpdate(data: UpdateOperationDto): OperationError {
     if (data.amount != null && !Operation.checkNumber(data.amount))
       return OperationError.IllegalAmount;
-
-    if (category && category.userId && category.userId !== this.account?.userId)
-      return OperationError.ForeignCategory;
 
     return OperationError.NoError;
   }
