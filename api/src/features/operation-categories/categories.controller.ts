@@ -9,6 +9,8 @@ import {
   UseGuards,
   HttpCode,
   HttpStatus,
+  NotFoundException,
+  ForbiddenException,
 } from '@nestjs/common';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
@@ -26,14 +28,13 @@ import {
 } from '@nestjs/swagger';
 import { AuthGuard } from '../../shared/guards/auth.guard';
 import { ViewCategoryDto } from './dto/view-category.dto';
-import { CommandBus, QueryBus } from '@nestjs/cqrs';
+import { CommandBus } from '@nestjs/cqrs';
 import { CreateCategoryCommand } from './usecases/commands/create-category.command';
 import { ViewUserDto } from '../users/dto/view-user.dto';
 import { User } from '../../shared/decorators/user.decorator';
-import { GetCategoryQuery } from './usecases/queries/get-category.query';
-import { GetUserCategoriesQuery } from './usecases/queries/get-user-categories.query';
 import { UpdateCategoryCommand } from './usecases/commands/update-category.command';
 import { DeleteCategoryCommand } from './usecases/commands/delete-category.command';
+import { CategoriesQueryRepository } from './database/categories.query.repository';
 
 @ApiTags('operation categories')
 @ApiBearerAuth()
@@ -43,7 +44,7 @@ import { DeleteCategoryCommand } from './usecases/commands/delete-category.comma
 export class CategoriesController {
   constructor(
     private readonly commandBus: CommandBus,
-    private readonly queryBus: QueryBus,
+    private readonly queryRepo: CategoriesQueryRepository,
   ) {}
 
   @Post()
@@ -61,7 +62,7 @@ export class CategoriesController {
     const id = await this.commandBus.execute(
       new CreateCategoryCommand(data, user.id),
     );
-    return this.queryBus.execute(new GetCategoryQuery(id, user.id));
+    return this.getOne(id, user.id);
   }
 
   @Get()
@@ -69,7 +70,7 @@ export class CategoriesController {
     summary: 'Get all current user categories including common ones',
   })
   async findAll(@User() user: ViewUserDto): Promise<ViewCategoryDto[]> {
-    return this.queryBus.execute(new GetUserCategoriesQuery(user.id));
+    return this.queryRepo.getByUser(user.id);
   }
 
   @Get(':id')
@@ -82,7 +83,7 @@ export class CategoriesController {
     @Param('id') id: string,
     @User() user: ViewUserDto,
   ): Promise<ViewCategoryDto> {
-    return this.queryBus.execute(new GetCategoryQuery(id, user.id));
+    return this.getOne(id, user.id);
   }
 
   @Patch(':id')
@@ -103,7 +104,7 @@ export class CategoriesController {
     const result = await this.commandBus.execute(
       new UpdateCategoryCommand(id, data, user.id),
     );
-    return this.queryBus.execute(new GetCategoryQuery(result, user.id));
+    return this.getOne(result, user.id);
   }
 
   @Delete(':id')
@@ -117,5 +118,15 @@ export class CategoriesController {
     @User() user: ViewUserDto,
   ): Promise<void> {
     return this.commandBus.execute(new DeleteCategoryCommand(id, user.id));
+  }
+
+  private async getOne(id: string, userId: string): Promise<ViewCategoryDto> {
+    const result = await this.queryRepo.get(id);
+    if (!result) throw new NotFoundException('Category not found');
+
+    if (result.userId && result.userId !== userId)
+      throw new ForbiddenException('Category belongs to another user');
+
+    return result;
   }
 }

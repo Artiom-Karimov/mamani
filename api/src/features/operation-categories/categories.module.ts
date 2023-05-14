@@ -11,14 +11,12 @@ import { CreateCategoryHandler } from './usecases/handlers/create-category.handl
 import { UpdateCategoryHandler } from './usecases/handlers/update-category.handler';
 import { DeleteCategoryHandler } from './usecases/handlers/delete-category.handler';
 import { GetCategoryHandler } from './usecases/handlers/get-category.handler';
-import { GetUserCategoriesHandler } from './usecases/handlers/get-user-categories.handler';
 
 const handlers = [
   CreateCategoryHandler,
   UpdateCategoryHandler,
   DeleteCategoryHandler,
   GetCategoryHandler,
-  GetUserCategoriesHandler,
 ];
 
 @Module({

@@ -9,7 +9,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Account } from './entities/account.entity';
 import { CreateAccountHandler } from './usecases/handlers/create-account.handler';
 import { GetAccountHandler } from './usecases/handlers/get-account.handler';
-import { GetUserAccountsHandler } from './usecases/handlers/get-user-accounts.query';
 import { UpdateAccountHandler } from './usecases/handlers/update-account.handler';
 import { DeleteAccountHandler } from './usecases/handlers/delete-account.handler';
 
@@ -18,7 +17,6 @@ const handlers = [
   GetAccountHandler,
   UpdateAccountHandler,
   DeleteAccountHandler,
-  GetUserAccountsHandler,
 ];
 
 @Module({

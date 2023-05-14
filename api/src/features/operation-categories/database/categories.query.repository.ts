@@ -27,7 +27,9 @@ export class CategoriesQueryRepository {
         where: [{ userId }, { userId: IsNull() }],
         order: { userId: 'DESC', name: 'ASC', createdAt: 'DESC' },
       });
-      return result.map((a) => new ViewCategoryDto(a));
+      const list = result.map((a) => new ViewCategoryDto(a));
+      ViewCategoryDto.moveChildrenIntoParents(list);
+      return list;
     } catch (error) {
       this.logger.error(error);
       return [];
