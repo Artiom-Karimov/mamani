@@ -1,4 +1,5 @@
 import { CreateOperationDto } from '../src/features/operations/dto/create-operation.dto';
+import { UpdateOperationDto } from '../src/features/operations/dto/update-operation.dto';
 import { expressions } from '../src/shared/models/regex';
 import { TestOperationUser } from './utils/generators/test.operation-user';
 import { TestApp } from './utils/test.app';
@@ -115,7 +116,6 @@ describe('OperationsController (e2e)', () => {
       .set('Authorization', `Bearer ${user1.user.token}`)
       .send(data);
 
-    console.log(response.body);
     expect(response.status).toBe(404);
 
     data = {
@@ -196,6 +196,97 @@ describe('OperationsController (e2e)', () => {
     await request(app.server)
       .get(`/operations/${user1.operations[0].id}`)
       .set('Authorization', `Bearer ${user2.user.token}`)
+      .expect(404);
+  });
+
+  it('User should create another operation', async () => {
+    const data: CreateOperationDto = {
+      accountId: user1.accounts[1].id!,
+      categoryId: user1.categories[1].id!,
+      amount: 667.44321,
+      description: 'I thought it would be nice to spend mamani',
+    };
+
+    const response = await request(app.server)
+      .post('/operations')
+      .set('Authorization', `Bearer ${user1.user.token}`)
+      .send(data)
+      .expect(201);
+
+    expect(response.body).toEqual({
+      ...data,
+      id: expect.stringMatching(expressions.uuid),
+      amount: 667.44,
+      accountName: user1.accounts[1].name,
+      createdAt: expect.stringMatching(expressions.isoDate),
+      type: user1.categories[1].type,
+      categoryName: user1.categories[1].name,
+    });
+
+    user1.operations.push(response.body);
+  });
+
+  it('User should update his operation', async () => {
+    const data: UpdateOperationDto = {
+      description: 'I was so wrong, you have no idea',
+      amount: 0,
+      categoryId: user1.categories[0].id,
+    };
+
+    const response = await request(app.server)
+      .patch(`/operations/${user1.operations[1].id}`)
+      .set('Authorization', `Bearer ${user1.user.token}`)
+      .send(data)
+      .expect(200);
+
+    expect(response.body).toEqual({
+      ...user1.operations[1],
+      ...data,
+      categoryName: user1.categories[0].name,
+    });
+
+    user1.operations[1] = response.body;
+  });
+
+  it('User should get updated operation', async () => {
+    const response = await request(app.server)
+      .get(`/operations/${user1.operations[1].id}`)
+      .set('Authorization', `Bearer ${user1.user.token}`)
+      .expect(200);
+
+    expect(response.body).toEqual(user1.operations[1]);
+  });
+
+  it('User2 should not update user1 operation', async () => {
+    const data: UpdateOperationDto = {
+      amount: 13,
+    };
+
+    await request(app.server)
+      .patch(`/operations/${user1.operations[1].id}`)
+      .set('Authorization', `Bearer ${user2.user.token}`)
+      .send(data)
+      .expect(403);
+  });
+
+  it('User2 should not delete user1 operation', async () => {
+    await request(app.server)
+      .delete(`/operations/${user1.operations[1].id}`)
+      .set('Authorization', `Bearer ${user2.user.token}`)
+      .expect(403);
+  });
+
+  it('User should delete his operation', async () => {
+    await request(app.server)
+      .delete(`/operations/${user1.operations[1].id}`)
+      .set('Authorization', `Bearer ${user1.user.token}`)
+      .expect(204);
+  });
+
+  it('User should not get deleted operation', async () => {
+    await request(app.server)
+      .get(`/operations/${user1.operations[1].id}`)
+      .set('Authorization', `Bearer ${user1.user.token}`)
       .expect(404);
   });
 });

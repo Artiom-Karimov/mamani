@@ -88,8 +88,8 @@ export class Operation extends DomainEntity {
     const err = this.checkBeforeUpdate(data);
     if (err !== OperationError.NoError) return err;
 
-    if (data.amount) this.number = data.amount;
-    if (data.description) this.description = data.description;
+    if (data.amount != null) this.number = data.amount;
+    if (data.description != null) this.description = data.description;
 
     return OperationError.NoError;
   }

@@ -9,6 +9,8 @@ import {
   UseGuards,
   NotFoundException,
   Query,
+  HttpCode,
+  HttpStatus,
 } from '@nestjs/common';
 import { CreateOperationDto } from './dto/create-operation.dto';
 import { UpdateOperationDto } from './dto/update-operation.dto';
@@ -77,6 +79,7 @@ export class OperationsController {
   }
 
   @Delete(':id')
+  @HttpCode(HttpStatus.NO_CONTENT)
   remove(@Param('id') id: string, @User() user: ViewUserDto): Promise<void> {
     return this.commandBus.execute(new DeleteOperationCommand(id, user.id));
   }
