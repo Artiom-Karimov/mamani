@@ -26,7 +26,7 @@ export class TestCategory extends CreateCategoryDto {
 
     this.type = type || OperationType.Income;
     this.name = `category-${TestCategory.counter}`;
-    this.description = `${this.user.login}.${this.name}`;
+    this.description = `${this.user.firstName}.${this.name}`;
 
     TestCategory.counter++;
     TestCategory.categories.push(this);
@@ -55,6 +55,7 @@ export class TestCategory extends CreateCategoryDto {
 
     const res = await request(this.server)
       .post('/categories')
+      .set('authorization', `Bearer ${this.token}`)
       .send(this)
       .expect(201);
 

@@ -20,7 +20,7 @@ export class TestAccount extends CreateAccountDto {
     else this.user = new TestUser(server);
 
     this.name = `account-${TestAccount.counter}`;
-    this.description = `${this.user.login}.${this.name}`;
+    this.description = `${this.user.firstName}.${this.name}`;
 
     TestAccount.counter++;
     TestAccount.accounts.push(this);
@@ -49,6 +49,7 @@ export class TestAccount extends CreateAccountDto {
 
     const res = await request(this.server)
       .post('/accounts')
+      .set('authorization', `Bearer ${this.token}`)
       .send(this)
       .expect(201);
 

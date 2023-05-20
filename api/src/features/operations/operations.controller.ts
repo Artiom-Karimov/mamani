@@ -9,6 +9,7 @@ import {
   UseGuards,
   NotImplementedException,
   NotFoundException,
+  Query,
 } from '@nestjs/common';
 import { CreateOperationDto } from './dto/create-operation.dto';
 import { UpdateOperationDto } from './dto/update-operation.dto';
@@ -27,6 +28,7 @@ import { UpdateOperationCommand } from './usecases/commands/update-operation.com
 import { DeleteOperationCommand } from './usecases/commands/delete-operation.command';
 import { OperationsQueryRepository } from './database/operations.query.repository';
 import { OperationPageDto } from './dto/operation-page.dto';
+import { OperationsQueryDto } from './dto/operations.query.dto';
 
 @ApiTags('operations')
 @ApiBearerAuth()
@@ -51,8 +53,8 @@ export class OperationsController {
   }
 
   @Get()
-  async findAll(): Promise<OperationPageDto> {
-    throw new NotImplementedException();
+  async findAll(@Query() query: OperationsQueryDto): Promise<OperationPageDto> {
+    return new OperationPageDto(query.pageSize);
   }
 
   @Get(':id')

@@ -5,4 +5,13 @@ import { ViewOperationDto } from './view-operation.dto';
 export class OperationPageDto extends PageDto<ViewOperationDto> {
   @ApiProperty({ type: [ViewOperationDto] })
   elements: ViewOperationDto[];
+
+  constructor(
+    pageSize: number,
+    page?: number,
+    pagesTotal?: number,
+    elementsTotal?: number,
+  ) {
+    super(pageSize, page, pagesTotal, elementsTotal);
+  }
 }

@@ -135,7 +135,7 @@ describe('AccountsController (e2e)', () => {
   let user2: TestUser;
   it('user2 should not get user1 account', async () => {
     user2 = TestUser.users[1];
-    const response = await request(app.server)
+    await request(app.server)
       .get(`/accounts/${accountId}`)
       .set('Authorization', `Bearer ${user2.token}`)
       .expect(403);
@@ -212,7 +212,7 @@ describe('AccountsController (e2e)', () => {
   });
 
   it('User2 should not be able to delete user1 account', async () => {
-    const response = await request(app.server)
+    await request(app.server)
       .delete(`/accounts/${accountId}`)
       .set('Authorization', `Bearer ${user2.token}`)
       .expect(403);

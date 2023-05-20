@@ -10,6 +10,7 @@ import { UsersModule } from '../../src/features/users/users.module';
 import { AccountsModule } from '../../src/features/accounts/accounts.module';
 import { AuthModule } from '../../src/features/auth/auth.module';
 import { CategoriesModule } from '../../src/features/operation-categories/categories.module';
+import { OperationsModule } from '../../src/features/operations/operations.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { CategoriesModule } from '../../src/features/operation-categories/catego
     TypeOrmModule.forRoot(typeOrmConfig),
     UsersModule,
     AccountsModule,
+    OperationsModule,
     AuthModule,
     CategoriesModule,
     TestDbModule,
