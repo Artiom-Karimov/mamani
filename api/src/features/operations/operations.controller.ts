@@ -7,7 +7,6 @@ import {
   Param,
   Delete,
   UseGuards,
-  NotImplementedException,
   NotFoundException,
   Query,
 } from '@nestjs/common';

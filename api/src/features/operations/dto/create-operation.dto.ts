@@ -21,10 +21,10 @@ export class CreateOperationDto {
   @Min(0)
   amount: number;
 
-  @IsOptional()
   @IsUUID()
   categoryId: string;
 
+  @IsOptional()
   @IsDate()
   createdAt?: Date;
 }
