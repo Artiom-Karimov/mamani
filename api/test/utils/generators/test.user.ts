@@ -38,6 +38,8 @@ export class TestUser extends CreateUserDto {
   }
 
   async register(): Promise<void> {
+    if (this.id) return;
+
     const res = await request(this.server)
       .post('/auth/register')
       .send(this)
