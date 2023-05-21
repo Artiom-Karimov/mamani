@@ -7,6 +7,7 @@ import {
   MaxLength,
   Min,
 } from 'class-validator';
+import { Transform } from 'class-transformer';
 
 export class CreateOperationDto {
   @IsUUID()
@@ -26,5 +27,6 @@ export class CreateOperationDto {
 
   @IsOptional()
   @IsDate()
+  @Transform(({ value }) => new Date(value))
   createdAt?: Date;
 }

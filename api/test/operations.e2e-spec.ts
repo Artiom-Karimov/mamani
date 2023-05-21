@@ -289,4 +289,48 @@ describe('OperationsController (e2e)', () => {
       .set('Authorization', `Bearer ${user1.user.token}`)
       .expect(404);
   });
+
+  it('Date from payload should be applied to operation', async () => {
+    const date = '1995-12-17T00:24:00.000Z';
+    const data = {
+      accountId: user2.accounts[0].id,
+      categoryId: user2.categories[0].id,
+      amount: 123456,
+      createdAt: date,
+    };
+
+    const response = await request(app.server)
+      .post('/operations')
+      .set('Authorization', `Bearer ${user2.user.token}`)
+      .send(data);
+
+    expect(response.status).toBe(201);
+    expect(response.body).toEqual({
+      ...data,
+      id: expect.stringMatching(expressions.uuid),
+      accountName: user2.accounts[0].name,
+      createdAt: date,
+      description: null,
+      type: user2.categories[0].type,
+      categoryName: user2.categories[0].name,
+    });
+
+    user2.operations.push(response.body);
+  });
+
+  it('Wrong date format should get 400', async () => {
+    const data = {
+      accountId: user2.accounts[0].id,
+      categoryId: user2.categories[0].id,
+      amount: 123456,
+      createdAt: 'Just yesterday',
+    };
+
+    const response = await request(app.server)
+      .post('/operations')
+      .set('Authorization', `Bearer ${user2.user.token}`)
+      .send(data);
+
+    expect(response.status).toBe(400);
+  });
 });
