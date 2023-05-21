@@ -6,12 +6,7 @@ export class OperationPageDto extends PageDto<ViewOperationDto> {
   @ApiProperty({ type: [ViewOperationDto] })
   elements: ViewOperationDto[];
 
-  constructor(
-    pageSize: number,
-    page?: number,
-    pagesTotal?: number,
-    elementsTotal?: number,
-  ) {
-    super(pageSize, page, pagesTotal, elementsTotal);
+  constructor(pageSize: number, page?: number, elementsTotal?: number) {
+    super(pageSize, page, elementsTotal);
   }
 }

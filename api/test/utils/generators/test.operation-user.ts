@@ -1,13 +1,20 @@
+import { CreateOperationDto } from '../../../src/features/operations/dto/create-operation.dto';
 import { ViewOperationDto } from '../../../src/features/operations/dto/view-operation.dto';
+import { OperationType } from '../../../src/features/operations/entities/operation-type';
 import { TestAccount } from './test.account';
 import { TestCategory } from './test.category';
 import { TestUser } from './test.user';
+import * as request from 'supertest';
 
 export class TestOperationUser {
   user: TestUser = new TestUser(this.server);
   accounts: TestAccount[] = [];
   categories: TestCategory[] = [];
   operations: ViewOperationDto[] = [];
+
+  get token(): string | undefined {
+    return this.user.token;
+  }
 
   constructor(private readonly server: any) {}
 
@@ -29,12 +36,38 @@ export class TestOperationUser {
     return this;
   }
 
-  async createCategories(amount: number): Promise<TestOperationUser> {
+  async createCategories(
+    amount: number,
+    type?: OperationType,
+  ): Promise<TestOperationUser> {
     for (let i = 0; i < amount; i++) {
-      const category = new TestCategory(this.server, this.user);
+      const category = new TestCategory(this.server, this.user, type);
       await category.sendToDb();
       this.categories.push(category);
     }
     return this;
+  }
+
+  async createOperation(
+    account: TestAccount,
+    category: TestCategory,
+    amount: number,
+    description?: string,
+  ): Promise<ViewOperationDto> {
+    const data: CreateOperationDto = {
+      accountId: account.id!,
+      categoryId: category.id!,
+      amount,
+      description,
+    };
+
+    const response = await request(this.server)
+      .post('/operations')
+      .set('Authorization', `Bearer ${this.token}`)
+      .send(data)
+      .expect(201);
+
+    this.operations.push(response.body);
+    return response.body;
   }
 }

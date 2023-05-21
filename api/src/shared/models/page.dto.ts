@@ -5,10 +5,10 @@ export class PageDto<T> {
   elementsTotal: number;
   elements: T[];
 
-  constructor(pageSize: number, page = 1, pagesTotal = 0, elementsTotal = 0) {
+  constructor(pageSize: number, page = 1, elementsTotal = 0) {
     this.pageSize = pageSize;
     this.page = page;
-    this.pagesTotal = pagesTotal;
+    this.pagesTotal = elementsTotal ? Math.ceil(elementsTotal / pageSize) : 0;
     this.elementsTotal = elementsTotal;
     this.elements = [];
   }

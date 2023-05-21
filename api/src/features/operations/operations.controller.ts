@@ -54,8 +54,11 @@ export class OperationsController {
   }
 
   @Get()
-  async findAll(@Query() query: OperationsQueryDto): Promise<OperationPageDto> {
-    return new OperationPageDto(query.pageSize);
+  async findAll(
+    @Query() query: OperationsQueryDto,
+    @User() user: ViewUserDto,
+  ): Promise<OperationPageDto> {
+    return this.queryRepo.findMany(query, user.id);
   }
 
   @Get(':id')
@@ -85,7 +88,7 @@ export class OperationsController {
   }
 
   private async getOne(id: string, userId: string): Promise<ViewOperationDto> {
-    const result = await this.queryRepo.get(id, userId);
+    const result = await this.queryRepo.findOne(id, userId);
     if (!result) throw new NotFoundException('Operation not found');
     return result;
   }
