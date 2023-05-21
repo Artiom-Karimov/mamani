@@ -3,6 +3,7 @@ import { OperationType } from '../entities/operation-type';
 import { OperationSortKey } from './operation-sort-key';
 import { PageQueryDto } from '../../../shared/models/page-query.dto';
 import { Transform } from 'class-transformer';
+import { ApiProperty } from '@nestjs/swagger';
 
 export class OperationsQueryDto extends PageQueryDto {
   @IsOptional()
@@ -29,5 +30,6 @@ export class OperationsQueryDto extends PageQueryDto {
 
   @IsOptional()
   @IsEnum(OperationSortKey)
+  @ApiProperty({ required: false, enum: OperationSortKey })
   sortBy = OperationSortKey.createdAt;
 }

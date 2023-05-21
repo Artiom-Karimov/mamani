@@ -15,7 +15,14 @@ import {
 import { CreateOperationDto } from './dto/create-operation.dto';
 import { UpdateOperationDto } from './dto/update-operation.dto';
 import {
+  ApiBadRequestResponse,
   ApiBearerAuth,
+  ApiCreatedResponse,
+  ApiForbiddenResponse,
+  ApiNoContentResponse,
+  ApiNotFoundResponse,
+  ApiOkResponse,
+  ApiOperation,
   ApiTags,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
@@ -43,6 +50,14 @@ export class OperationsController {
   ) {}
 
   @Post()
+  @HttpCode(HttpStatus.CREATED)
+  @ApiOperation({ summary: 'Create new operation for current user' })
+  @ApiCreatedResponse({
+    description: 'Success, returns created operation',
+    type: ViewOperationDto,
+  })
+  @ApiBadRequestResponse({ description: 'Invalid data' })
+  @ApiNotFoundResponse({ description: 'Account or category not found' })
   async create(
     @Body() data: CreateOperationDto,
     @User() user: ViewUserDto,
@@ -54,6 +69,10 @@ export class OperationsController {
   }
 
   @Get()
+  @ApiOperation({
+    summary:
+      'Get all current user operations with pagination, sorting and filters',
+  })
   async findAll(
     @Query() query: OperationsQueryDto,
     @User() user: ViewUserDto,
@@ -62,6 +81,10 @@ export class OperationsController {
   }
 
   @Get(':id')
+  @ApiOperation({
+    summary: 'Get operation by id',
+  })
+  @ApiNotFoundResponse({ description: 'Not found' })
   async findOne(
     @Param('id') id: string,
     @User() user: ViewUserDto,
@@ -70,6 +93,15 @@ export class OperationsController {
   }
 
   @Patch(':id')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Update operation' })
+  @ApiOkResponse({
+    description: 'Success, returns updated operation',
+    type: ViewOperationDto,
+  })
+  @ApiBadRequestResponse({ description: 'Invalid data' })
+  @ApiForbiddenResponse({ description: 'Operation belongs to another user' })
+  @ApiNotFoundResponse({ description: 'Not found' })
   async update(
     @Param('id') id: string,
     @Body() data: UpdateOperationDto,
@@ -83,6 +115,10 @@ export class OperationsController {
 
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
+  @ApiOperation({ summary: 'Delete operation' })
+  @ApiNoContentResponse({ description: 'Success' })
+  @ApiForbiddenResponse({ description: 'Operation belongs to another user' })
+  @ApiNotFoundResponse({ description: 'Not found' })
   remove(@Param('id') id: string, @User() user: ViewUserDto): Promise<void> {
     return this.commandBus.execute(new DeleteOperationCommand(id, user.id));
   }
