@@ -1,6 +1,11 @@
 import { Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, SelectQueryBuilder } from 'typeorm';
+import {
+  LessThanOrEqual,
+  MoreThanOrEqual,
+  Repository,
+  SelectQueryBuilder,
+} from 'typeorm';
 import { Operation } from '../entities/operation.entity';
 import { ViewOperationDto } from '../dto/view-operation.dto';
 import { OperationsQueryDto } from '../dto/operations.query.dto';
@@ -50,7 +55,7 @@ export class OperationsQueryRepository {
     query: OperationsQueryDto,
     userId: string,
   ): Promise<OperationPageDto> {
-    const builder = this.getBuilder(userId);
+    const builder = this.getBuilder(userId, query);
     this.sort(builder, query);
     this.limit(builder, query);
 
@@ -61,12 +66,25 @@ export class OperationsQueryRepository {
     return page.add(...views);
   }
 
-  private getBuilder(userId: string): SelectQueryBuilder<Operation> {
-    return this.repo
+  private getBuilder(
+    userId: string,
+    query: OperationsQueryDto,
+  ): SelectQueryBuilder<Operation> {
+    const builder = this.repo
       .createQueryBuilder('operation')
       .leftJoinAndSelect('operation.category', 'category')
       .leftJoinAndSelect('operation.account', 'account')
       .where(`"account"."userId" = '${userId}'`);
+
+    if (query.startDate)
+      builder.andWhere({ createdAt: MoreThanOrEqual(query.startDate) });
+    if (query.endDate)
+      builder.andWhere({ createdAt: LessThanOrEqual(query.endDate) });
+    if (query.type) builder.andWhere({ type: query.type });
+    if (query.accountId) builder.andWhere({ accountId: query.accountId });
+    if (query.categoryId) builder.andWhere({ categoryId: query.categoryId });
+
+    return builder;
   }
   private sort(
     builder: SelectQueryBuilder<Operation>,

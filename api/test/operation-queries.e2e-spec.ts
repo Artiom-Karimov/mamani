@@ -75,4 +75,110 @@ describe('Queries for operations (e2e)', () => {
       elements: user1.operations.slice(0, 20),
     });
   });
+
+  it('User1 should get last page', async () => {
+    const response = await request(app.server)
+      .get('/operations')
+      .query({ page: 3 })
+      .set('Authorization', `Bearer ${user1.user.token}`)
+      .expect(200);
+
+    expect(response.body).toEqual({
+      pageSize: 20,
+      page: 3,
+      pagesTotal: 3,
+      elementsTotal: 48,
+      elements: user1.operations.slice(40),
+    });
+  });
+
+  it('User1 should get first page ASC', async () => {
+    user1.operations.reverse();
+
+    const response = await request(app.server)
+      .get('/operations')
+      .set('Authorization', `Bearer ${user1.user.token}`)
+      .query({ sortDirection: 'ASC' })
+      .expect(200);
+
+    expect(response.body).toEqual({
+      pageSize: 20,
+      page: 1,
+      pagesTotal: 3,
+      elementsTotal: 48,
+      elements: user1.operations.slice(0, 20),
+    });
+  });
+
+  it('User1 should get first page ASC with time limits', async () => {
+    const startDate = user1.operations[3].createdAt;
+    const endDate = user1.operations[7].createdAt;
+
+    const response = await request(app.server)
+      .get('/operations')
+      .set('Authorization', `Bearer ${user1.user.token}`)
+      .query({ sortDirection: 'ASC', startDate, endDate })
+      .expect(200);
+
+    expect(response.body.elements.length).toBe(5);
+    expect(response.body).toEqual({
+      pageSize: 20,
+      page: 1,
+      pagesTotal: 1,
+      elementsTotal: 5,
+      elements: user1.operations.slice(3, 8),
+    });
+  });
+
+  it('User1 should get only Income operations', async () => {
+    const response = await request(app.server)
+      .get('/operations')
+      .set('Authorization', `Bearer ${user1.user.token}`)
+      .query({ sortDirection: 'ASC', type: 'Income', page: 2 })
+      .expect(200);
+
+    expect(response.body).toEqual({
+      pageSize: 20,
+      page: 2,
+      pagesTotal: 2,
+      elementsTotal: 24,
+      elements: user1.operations.slice(20, 24),
+    });
+  });
+
+  it('User1 should get category2 operations', async () => {
+    const cat = user1.categories[1].id;
+
+    const response = await request(app.server)
+      .get('/operations')
+      .set('Authorization', `Bearer ${user1.user.token}`)
+      .query({ categoryId: cat, sortDirection: 'ASC' })
+      .expect(200);
+
+    expect(response.body).toEqual({
+      pageSize: 20,
+      page: 1,
+      pagesTotal: 2,
+      elementsTotal: 24,
+      elements: user1.operations
+        .filter((o) => o.categoryId === cat)
+        .slice(0, 20),
+    });
+  });
+
+  it('User1 should not get operations for account2', async () => {
+    const response = await request(app.server)
+      .get('/operations')
+      .set('Authorization', `Bearer ${user1.user.token}`)
+      .query({ accountId: user1.accounts[1].id })
+      .expect(200);
+
+    expect(response.body).toEqual({
+      pageSize: 20,
+      page: 1,
+      pagesTotal: 0,
+      elementsTotal: 0,
+      elements: [],
+    });
+  });
 });
