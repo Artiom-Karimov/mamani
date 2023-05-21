@@ -1,7 +1,5 @@
-import { CreateOperationDto } from '../src/features/operations/dto/create-operation.dto';
-import { UpdateOperationDto } from '../src/features/operations/dto/update-operation.dto';
+import { ViewOperationDto } from '../src/features/operations/dto/view-operation.dto';
 import { OperationType } from '../src/features/operations/entities/operation-type';
-import { expressions } from '../src/shared/models/regex';
 import { TestOperationUser } from './utils/generators/test.operation-user';
 import { TestApp } from './utils/test.app';
 import * as request from 'supertest';
@@ -179,6 +177,28 @@ describe('Queries for operations (e2e)', () => {
       pagesTotal: 0,
       elementsTotal: 0,
       elements: [],
+    });
+  });
+
+  it('User1 should get operations sorted by amount', async () => {
+    user1.operations.sort(
+      (a: ViewOperationDto, b: ViewOperationDto): number => {
+        return b.amount - a.amount;
+      },
+    );
+
+    const response = await request(app.server)
+      .get('/operations')
+      .set('Authorization', `Bearer ${user1.user.token}`)
+      .query({ sortBy: 'amount' })
+      .expect(200);
+
+    expect(response.body).toEqual({
+      pageSize: 20,
+      page: 1,
+      pagesTotal: 3,
+      elementsTotal: 48,
+      elements: user1.operations.slice(0, 20),
     });
   });
 });
