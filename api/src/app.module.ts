@@ -12,6 +12,7 @@ import { AuthModule } from './features/auth/auth.module';
 import { CategoriesModule } from './features/operation-categories/categories.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { typeOrmConfig } from './config/typeorm.config';
+import { ReportsModule } from './features/reports/reports.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { typeOrmConfig } from './config/typeorm.config';
     OperationsModule,
     AuthModule,
     CategoriesModule,
+    ReportsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
