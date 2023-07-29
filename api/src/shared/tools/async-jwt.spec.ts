@@ -1,6 +1,6 @@
 import { JsonWebTokenError } from 'jsonwebtoken';
 import { AsyncJwt } from './async-jwt';
-import { TokenPayload } from '../../auth/dto/token-payload';
+import { TokenPayload } from '../../features/auth/dto/token-payload';
 
 describe('Async JWT adapter tests', () => {
   it('sign should return string', async () => {
