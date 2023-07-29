@@ -31,9 +31,9 @@ describe('Queries for operations (e2e)', () => {
     user1 = await TestOperationUser.create(app.server);
     await user1.createAccounts(2);
     await user1.createCategories(1, OperationType.Income);
-    await user1.createCategories(1, OperationType.Outcome);
+    await user1.createCategories(1, OperationType.Expence);
     await prepareOperations(user1, 24, OperationType.Income);
-    await prepareOperations(user1, 24, OperationType.Outcome);
+    await prepareOperations(user1, 24, OperationType.Expence);
 
     user2 = await TestOperationUser.create(app.server);
   }, 20_000);

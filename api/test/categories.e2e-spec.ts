@@ -52,7 +52,7 @@ describe('CategoriesController (e2e)', () => {
 
   let categoryId: string;
   const categoryData: CreateCategoryDto = {
-    type: OperationType.Outcome,
+    type: OperationType.Expence,
     name: 'Household',
     description: 'Goods for housekeeping & maintenance',
     color: '#0099ff',
