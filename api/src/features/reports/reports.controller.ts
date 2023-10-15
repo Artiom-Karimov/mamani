@@ -1,6 +1,7 @@
 import {
   Controller,
   Get,
+  NotFoundException,
   NotImplementedException,
   Param,
   Query,
@@ -17,6 +18,8 @@ import { OverallReportDto } from './dto/overall-report.dto';
 import { AccountReportDto } from './dto/account-report.dto';
 import { ReportItemDto } from './dto/report-item.dto';
 import { ReportsQueryDto } from './dto/reports-query.dto';
+import { User } from '../../shared/decorators/user.decorator';
+import { ViewUserDto } from '../users/dto/view-user.dto';
 
 @ApiTags('reports')
 @ApiBearerAuth()
@@ -43,9 +46,16 @@ export class ReportsController {
 
   @Get('categories/:categoryId')
   async getCategoryReport(
+    @User() user: ViewUserDto,
     @Query() query: ReportsQueryDto,
     @Param('categoryId') categoryId: string,
   ): Promise<ReportItemDto> {
-    throw new NotImplementedException();
+    const result = await this.repo.getCategoryReport(
+      user.id,
+      categoryId,
+      query,
+    );
+    if (!result) throw new NotFoundException('No data found');
+    return result;
   }
 }

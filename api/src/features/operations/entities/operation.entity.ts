@@ -6,6 +6,7 @@ import { DomainEntity } from '../../../shared/models/domain.entity';
 import { CreateOperationDto } from '../dto/create-operation.dto';
 import { OperationError } from './operation-error';
 import { UpdateOperationDto } from '../dto/update-operation.dto';
+import { StringToNumber } from '../../../shared/tools/string-to-number';
 
 @Entity()
 export class Operation extends DomainEntity {
@@ -45,11 +46,11 @@ export class Operation extends DomainEntity {
 
   /** Amount converted to float */
   get number(): number {
-    return +this.amount / 100;
+    return StringToNumber.toNumber(this.amount);
   }
   /** Amount converted to float */
   set number(value: number) {
-    this.amount = (value * 100).toFixed(0);
+    this.amount = StringToNumber.toString(value);
   }
 
   /** Actual money amount is (value / 100) (1 is a cent) */

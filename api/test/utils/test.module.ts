@@ -11,6 +11,7 @@ import { AccountsModule } from '../../src/features/accounts/accounts.module';
 import { AuthModule } from '../../src/features/auth/auth.module';
 import { CategoriesModule } from '../../src/features/operation-categories/categories.module';
 import { OperationsModule } from '../../src/features/operations/operations.module';
+import { ReportsModule } from '../../src/features/reports/reports.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { OperationsModule } from '../../src/features/operations/operations.modul
     OperationsModule,
     AuthModule,
     CategoriesModule,
+    ReportsModule,
     TestDbModule,
   ],
 })
