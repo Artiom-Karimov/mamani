@@ -15,7 +15,10 @@ import { GetUserQuery } from '../../features/users/usecases/queries/get-user.que
 export class AuthGuard implements CanActivate {
   private readonly key: string;
 
-  constructor(private readonly queryBus: QueryBus, config: ConfigService) {
+  constructor(
+    private readonly queryBus: QueryBus,
+    config: ConfigService,
+  ) {
     const key = config.get('JWT_SECRET_KEY');
     if (!key) throw new Error('You should put JWT_SECRET_KEY into environment');
     this.key = key;

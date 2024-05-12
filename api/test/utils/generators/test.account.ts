@@ -13,7 +13,10 @@ export class TestAccount extends CreateAccountDto {
   private static counter = 0;
   public static readonly accounts: TestAccount[] = [];
 
-  constructor(private readonly server: any, user?: TestUser) {
+  constructor(
+    private readonly server: any,
+    user?: TestUser,
+  ) {
     super();
 
     if (user) this.user = user;
