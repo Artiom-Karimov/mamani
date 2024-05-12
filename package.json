@@ -1,6 +1,7 @@
 {
   "name": "mamani",
   "workspaces": [
+    "users",
     "api"
   ],
   "version": "0.0.0",
