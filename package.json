@@ -1,0 +1,25 @@
+{
+  "name": "mamani",
+  "workspaces": [
+    "api"
+  ],
+  "version": "0.0.0",
+  "description": "Personal money accounting service",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Artiom-Karimov/mamani.git"
+  },
+  "author": "Artiom Karimov",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Artiom-Karimov/mamani/issues"
+  },
+  "homepage": "https://github.com/Artiom-Karimov/mamani#readme",
+  "dependencies": {
+    "@types/node": "^20.12.11"
+  }
+}

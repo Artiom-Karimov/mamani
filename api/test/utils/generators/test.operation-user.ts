@@ -7,7 +7,7 @@ import { TestUser } from './test.user';
 import * as request from 'supertest';
 
 export class TestOperationUser {
-  user: TestUser = new TestUser(this.server);
+  user: TestUser;
   accounts: TestAccount[] = [];
   categories: TestCategory[] = [];
   operations: ViewOperationDto[] = [];
@@ -16,7 +16,9 @@ export class TestOperationUser {
     return this.user.token;
   }
 
-  constructor(private readonly server: any) {}
+  constructor(private readonly server: any) {
+    this.user = new TestUser(this.server);
+  }
 
   static async create(server: any): Promise<TestOperationUser> {
     const result = new TestOperationUser(server);

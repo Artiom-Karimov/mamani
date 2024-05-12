@@ -8,5 +8,6 @@ export class OperationPageDto extends PageDto<ViewOperationDto> {
 
   constructor(pageSize: number, page?: number, elementsTotal?: number) {
     super(pageSize, page, elementsTotal);
+    this.elements = [];
   }
 }
