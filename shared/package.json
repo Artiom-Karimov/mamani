@@ -1,0 +1,9 @@
+{
+  "name": "@mamani/shared",
+  "version": "0.0.1",
+  "description": "",
+  "author": "Artiom Karimov",
+  "private": true,
+  "license": "UNLICENSED",
+  "main": "index.ts"
+}

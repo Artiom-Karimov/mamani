@@ -1,6 +1,7 @@
 {
   "name": "mamani",
   "workspaces": [
+    "shared",
     "users",
     "api"
   ],
