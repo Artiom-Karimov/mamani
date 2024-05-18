@@ -15,7 +15,7 @@ export class BaseEntity<T extends BaseDTO> {
   }
 
   /** Get changes to update persistence and commit transaction */
-  public get changes(): Partial<T> | null {
+  protected get changes(): Partial<T> | null {
     return this._changes ? { ...this._changes, updatedAt: new Date() } : null;
   }
 

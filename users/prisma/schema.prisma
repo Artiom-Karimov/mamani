@@ -29,6 +29,7 @@ model User {
   email     String   @unique @db.VarChar(100)
   hash      String   @db.VarChar(100)
   createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz()
+  updatedAt DateTime @default(now()) @map("updated_at") @db.Timestamptz()
 
-  @@map("users")
+  @@map("user")
 }
